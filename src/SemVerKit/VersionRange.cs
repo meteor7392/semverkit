@@ -148,6 +148,10 @@ public sealed class VersionRange
         {
             buildMetadata = text.Substring(plusIndex + 1);
             text = text.Substring(0, plusIndex);
+            if (string.IsNullOrEmpty(buildMetadata))
+            {
+                return false;
+            }
         }
 
         var preRelease = string.Empty;
@@ -156,6 +160,10 @@ public sealed class VersionRange
         {
             preRelease = text.Substring(dashIndex + 1);
             text = text.Substring(0, dashIndex);
+            if (string.IsNullOrEmpty(preRelease))
+            {
+                return false;
+            }
         }
 
         var core = text.Split('.');
