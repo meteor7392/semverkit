@@ -204,15 +204,11 @@ public sealed class VersionRange
         var (version, components) = ParsePartialComponents(input);
 
         SemanticVersion upper;
-        if (components == 1)
+        if (components == 1 || version.Major > 0)
         {
             upper = new SemanticVersion(version.Major + 1, 0, 0);
         }
-        else if (version.Major > 0)
-        {
-            upper = new SemanticVersion(version.Major + 1, 0, 0);
-        }
-        else if (version.Minor > 0)
+        else if (components == 2 || version.Minor > 0)
         {
             upper = new SemanticVersion(0, version.Minor + 1, 0);
         }
