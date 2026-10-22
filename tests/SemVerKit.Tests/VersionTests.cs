@@ -39,4 +39,19 @@ public class VersionTests
         var actual = VersionRange.IsSatisfiedBy(range, SemanticVersion.Parse(version));
         Assert.Equal(expected, actual);
     }
+
+    [Theory]
+    [InlineData("^0", "0.9.0", true)]
+    [InlineData("^0", "1.0.0", false)]
+    [InlineData("^0.0", "0.0.9", true)]
+    [InlineData("^0.0", "0.1.0", false)]
+    [InlineData("^0.3", "0.3.9", true)]
+    [InlineData("^0.3", "0.4.0", false)]
+    [InlineData("^1.2", "1.9.0", true)]
+    [InlineData("^1.2", "2.0.0", false)]
+    public void CaretPartialRanges_RespectPrecision(string range, string version, bool expected)
+    {
+        var actual = VersionRange.IsSatisfiedBy(range, SemanticVersion.Parse(version));
+        Assert.Equal(expected, actual);
+    }
 }

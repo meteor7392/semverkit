@@ -201,10 +201,14 @@ public sealed class VersionRange
 
     private static Func<SemanticVersion, bool> Caret(string input)
     {
-        var (version, _) = ParsePartialComponents(input);
+        var (version, components) = ParsePartialComponents(input);
 
         SemanticVersion upper;
-        if (version.Major > 0)
+        if (components == 1)
+        {
+            upper = new SemanticVersion(version.Major + 1, 0, 0);
+        }
+        else if (version.Major > 0)
         {
             upper = new SemanticVersion(version.Major + 1, 0, 0);
         }
