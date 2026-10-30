@@ -29,6 +29,17 @@ public sealed class SemanticVersion : IComparable<SemanticVersion>, IEquatable<S
         BuildMetadata = buildMetadata ?? string.Empty;
     }
 
+    public SemanticVersion Bump(string level)
+    {
+        return level.ToLowerInvariant() switch
+        {
+            "major" => new SemanticVersion(Major + 1, 0, 0),
+            "minor" => new SemanticVersion(Major, Minor + 1, 0),
+            "patch" => new SemanticVersion(Major, Minor, Patch + 1),
+            _ => throw new ArgumentException("Bump level must be major, minor, or patch.", nameof(level))
+        };
+    }
+
     public static bool TryParse(string? input, out SemanticVersion? version)
     {
         version = null;

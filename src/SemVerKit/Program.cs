@@ -37,13 +37,7 @@ public static class Program
                 case "bump":
                     RequireArgumentCount(args, 3);
                     var source = SemanticVersion.Parse(args[1]);
-                    var bumped = args[2].ToLowerInvariant() switch
-                    {
-                        "major" => new SemanticVersion(source.Major + 1, 0, 0),
-                        "minor" => new SemanticVersion(source.Major, source.Minor + 1, 0),
-                        "patch" => new SemanticVersion(source.Major, source.Minor, source.Patch + 1),
-                        _ => throw new ArgumentException("Bump level must be major, minor, or patch.")
-                    };
+                    var bumped = source.Bump(args[2]);
                     Console.WriteLine(bumped);
                     return 0;
 
