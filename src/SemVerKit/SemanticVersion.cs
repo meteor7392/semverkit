@@ -17,9 +17,19 @@ public sealed class SemanticVersion : IComparable<SemanticVersion>, IEquatable<S
         IEnumerable<string>? preRelease = null,
         string? buildMetadata = null)
     {
-        if (major < 0 || minor < 0 || patch < 0)
+        if (major < 0)
         {
             throw new ArgumentOutOfRangeException(nameof(major), "Version components must be non-negative.");
+        }
+
+        if (minor < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(minor), "Version components must be non-negative.");
+        }
+
+        if (patch < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(patch), "Version components must be non-negative.");
         }
 
         var preReleaseIdentifiers = preRelease is null ? Array.Empty<string>() : preRelease.ToArray();
