@@ -22,11 +22,26 @@ public sealed class SemanticVersion : IComparable<SemanticVersion>, IEquatable<S
             throw new ArgumentOutOfRangeException(nameof(major), "Version components must be non-negative.");
         }
 
+        var preReleaseIdentifiers = preRelease is null ? Array.Empty<string>() : preRelease.ToArray();
+        foreach (var identifier in preReleaseIdentifiers)
+        {
+            if (!IsValidPreReleaseIdentifier(identifier))
+            {
+                throw new ArgumentException($"Invalid prerelease identifier: '{identifier}'.", nameof(preRelease));
+            }
+        }
+
+        var normalizedBuildMetadata = buildMetadata ?? string.Empty;
+        if (!string.IsNullOrEmpty(normalizedBuildMetadata) && !IsValidBuildMetadata(normalizedBuildMetadata))
+        {
+            throw new ArgumentException($"Invalid build metadata: '{normalizedBuildMetadata}'.", nameof(buildMetadata));
+        }
+
         Major = major;
         Minor = minor;
         Patch = patch;
-        PreRelease = preRelease is null ? Array.Empty<string>() : preRelease.ToArray();
-        BuildMetadata = buildMetadata ?? string.Empty;
+        PreRelease = preReleaseIdentifiers;
+        BuildMetadata = normalizedBuildMetadata;
     }
 
     public SemanticVersion Bump(string level)
