@@ -131,8 +131,16 @@ public sealed class SemanticVersion : IComparable<SemanticVersion>, IEquatable<S
             }
         }
 
-        version = new SemanticVersion(major, minor, patch, preRelease, buildMetadata);
-        return true;
+        try
+        {
+            version = new SemanticVersion(major, minor, patch, preRelease, buildMetadata);
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            version = null;
+            return false;
+        }
     }
 
     public static SemanticVersion Parse(string input)
