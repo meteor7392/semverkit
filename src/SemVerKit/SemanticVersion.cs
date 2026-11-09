@@ -56,6 +56,11 @@ public sealed class SemanticVersion : IComparable<SemanticVersion>, IEquatable<S
 
     public SemanticVersion Bump(string level)
     {
+        if (level is null)
+        {
+            throw new ArgumentNullException(nameof(level));
+        }
+
         return level.ToLowerInvariant() switch
         {
             "major" => new SemanticVersion(Major + 1, 0, 0),
