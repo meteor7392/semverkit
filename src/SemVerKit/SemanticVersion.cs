@@ -150,6 +150,8 @@ public sealed class SemanticVersion : IComparable<SemanticVersion>, IEquatable<S
 
     public static SemanticVersion Parse(string input)
     {
+        ArgumentNullException.ThrowIfNull(input);
+
         if (!TryParse(input, out var version) || version is null)
         {
             throw new FormatException($"Invalid semantic version: '{input}'.");
@@ -272,13 +274,17 @@ public sealed class SemanticVersion : IComparable<SemanticVersion>, IEquatable<S
 
     public static bool operator !=(SemanticVersion? left, SemanticVersion? right) => !(left == right);
 
-    public static bool operator <(SemanticVersion left, SemanticVersion right) => left.CompareTo(right) < 0;
+    public static bool operator <(SemanticVersion? left, SemanticVersion? right) =>
+        left is null ? right is not null : left.CompareTo(right) < 0;
 
-    public static bool operator <=(SemanticVersion left, SemanticVersion right) => left.CompareTo(right) <= 0;
+    public static bool operator <=(SemanticVersion? left, SemanticVersion? right) =>
+        left is null ? true : left.CompareTo(right) <= 0;
 
-    public static bool operator >(SemanticVersion left, SemanticVersion right) => left.CompareTo(right) > 0;
+    public static bool operator >(SemanticVersion? left, SemanticVersion? right) =>
+        left is null ? false : left.CompareTo(right) > 0;
 
-    public static bool operator >=(SemanticVersion left, SemanticVersion right) => left.CompareTo(right) >= 0;
+    public static bool operator >=(SemanticVersion? left, SemanticVersion? right) =>
+        left is null ? right is null : left.CompareTo(right) >= 0;
 
     internal static bool IsNonNegativeInteger(string value) =>
         !string.IsNullOrEmpty(value) && System.Text.RegularExpressions.Regex.IsMatch(value, "^(0|[1-9][0-9]*)$");

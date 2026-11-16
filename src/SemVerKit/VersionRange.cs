@@ -11,10 +11,17 @@ public sealed class VersionRange
         _predicate = Parse(range);
     }
 
-    public bool IsSatisfiedBy(SemanticVersion version) => _predicate(version);
+    public bool IsSatisfiedBy(SemanticVersion version)
+    {
+        ArgumentNullException.ThrowIfNull(version);
+        return _predicate(version);
+    }
 
-    public static bool IsSatisfiedBy(string range, SemanticVersion version) =>
-        new VersionRange(range).IsSatisfiedBy(version);
+    public static bool IsSatisfiedBy(string range, SemanticVersion version)
+    {
+        ArgumentNullException.ThrowIfNull(version);
+        return new VersionRange(range).IsSatisfiedBy(version);
+    }
 
     private static Func<SemanticVersion, bool> Parse(string? range)
     {
